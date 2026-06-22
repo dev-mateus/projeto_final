@@ -79,6 +79,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Inclui Random Forest na comparacao.",
     )
+    parser.add_argument(
+        "--no-svm",
+        action="store_true",
+        help="Remove SVM da comparacao (util para execucao rapida em datasets grandes).",
+    )
     return parser.parse_args()
 
 
@@ -202,7 +207,7 @@ def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray, y_score: np.ndarray)
     return metrics
 
 
-def make_model_catalog(include_rf: bool) -> dict[str, dict[str, Any]]:
+def make_model_catalog(include_rf: bool, include_svm: bool = True) -> dict[str, dict[str, Any]]:
     catalog: dict[str, dict[str, Any]] = {
         "dummy": {
             "model": DummyClassifier(strategy="most_frequent", random_state=RANDOM_STATE),
@@ -212,11 +217,13 @@ def make_model_catalog(include_rf: bool) -> dict[str, dict[str, Any]]:
             "model": LogisticRegression(max_iter=400, solver="liblinear", random_state=RANDOM_STATE),
             "scale": True,
         },
-        "svm_rbf": {
+    }
+
+    if include_svm:
+        catalog["svm_rbf"] = {
             "model": SVC(kernel="rbf", probability=True, class_weight=None, random_state=RANDOM_STATE),
             "scale": True,
-        },
-    }
+        }
 
     if include_rf:
         catalog["random_forest"] = {
@@ -532,7 +539,7 @@ def main() -> None:
     x = df.drop(columns=["Class"])
     y = df["Class"].astype(int)
 
-    model_catalog = make_model_catalog(include_rf=args.include_rf)
+    model_catalog = make_model_catalog(include_rf=args.include_rf, include_svm=not args.no_svm)
     scenario_catalog = make_scenario_catalog()
 
     print("[3/6] Rodando validacao cruzada (pode demorar)...", flush=True)
