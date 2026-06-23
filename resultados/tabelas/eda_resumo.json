@@ -1,8 +1,8 @@
 {
-  "n_linhas": 50000,
+  "n_linhas": 284807,
   "n_colunas": 31,
-  "n_fraudes": 148,
-  "n_legitimas": 49852,
-  "fraude_ratio": 0.00296,
+  "n_fraudes": 492,
+  "n_legitimas": 284315,
+  "fraude_ratio": 0.001727485630620034,
   "missing_total": 0
 }
