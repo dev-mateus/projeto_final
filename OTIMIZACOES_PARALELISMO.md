@@ -28,11 +28,13 @@ O pipeline agora **usa todos os núcleos do processador** para paralelizar a exe
 ## Como Usar
 
 ### Execução padrão (paralela com todos os núcleos)
+
 ```bash
 python fraud_detection_pipeline.py
 ```
 
 ### Controle manual de workers
+
 ```bash
 # Usar 4 núcleos apenas
 python fraud_detection_pipeline.py --n-jobs 4
@@ -42,12 +44,14 @@ python fraud_detection_pipeline.py --n-jobs 1
 ```
 
 ### Modo rápido com paralelismo
+
 ```bash
 # Combina rápido-mode com paralelismo automático
 python fraud_detection_pipeline.py --fast-mode
 ```
 
 ### Exemplo completo
+
 ```bash
 # 120k linhas, 3 folds, todos os cenários, paralelo
 python fraud_detection_pipeline.py --max-rows 120000 --n-splits 3
@@ -56,13 +60,14 @@ python fraud_detection_pipeline.py --max-rows 120000 --n-splits 3
 ## Impacto de Performance
 
 | Configuração | Ganho Esperado |
-|---|---|
+| --- | --- |
 | Sequencial (`--n-jobs 1`) | Baseline |
 | Paralelo 2 núcleos | ~1.8x mais rápido |
 | Paralelo 4 núcleos | ~3.5x mais rápido |
 | Paralelo 8 núcleos | ~7x mais rápido (varia) |
 
 **Nota**: O overhead de inicialização de workers pode não compensar em execuções muito curtas (poucos folds). O benefício real aparece com:
+
 - Muitos folds (5+)
 - Dataset grande (100k+ linhas)
 - Múltiplos cenários + modelos
@@ -71,7 +76,7 @@ python fraud_detection_pipeline.py --max-rows 120000 --n-splits 3
 
 Quando executa, verá mensagens assim:
 
-```
+``` bash
 [Parallel(n_jobs=-1)]: Using backend LokyBackend with 8 concurrent workers.
 [Parallel(n_jobs=-1)]: Done 2 out of 2 | elapsed: 1.9s finished
 ```
